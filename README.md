@@ -2,22 +2,19 @@
 
 This is a example application to teach students the basics of web programming.
 
-# Prerequisites
-You will need the latest LTS version of NodeJs (https://nodejs.org/en/) and a IDE of you choice, we recommend VSCode (https://code.visualstudio.com/) with plugins for Javascript, Typescript, CSS and SonarLint or WebStorm (https://www.jetbrains.com/webstorm/).
+Prerequisites:
+Because we use .NET 6 for this project you need to install a IDE with the necessary tool, we recommend Visual Studio 2022 Community Edition (https://visualstudio.microsoft.com/) or Enterprise Edition for students (https://azureforeducation.microsoft.com/devtools) if you are using Windows or the DotUltimate platform (https://www.jetbrains.com/dotnet/) with Rider for .NET for students (https://www.jetbrains.com/rider/) if you are using Linux or MacOS X, you can get a license for all JetBrains products via your academic email. For Visual Studio we also recommend the DotUltimate platform for the ReSharper plugin, it may slow down your IDE but you gain a better code suggestions and safety checks. 
 
-Also install the OpenApi generator after installing NodeJs via the command:
+To start working with the backend install docker and docker compose from https://docs.docker.com/engine/install/ and enter the command below to launch the Postgresql database while in the Deployment folder:
 
-npm install @openapitools/openapi-generator-cli -g
+docker-compose -f .\docker-compose.yml -p mobylab-app-db up -d
 
-# How to work with it
-The project was started using Vite (https://vitejs.dev/guide/) for faster build times. The command for initializing the project was:
+You can use PGAdmin (https://www.pgadmin.org/) or DBeaver (https://dbeaver.io/download/) to access the database on localhost:5432 with database/user/password "mobylab-app". 
 
-npm create vite@latest mobylab-web-app --template react-ts
+To work with the database migrations in .NET install the dotnet-ef tool by using the following command:
 
-To generate the REST client for the project each time you modify it run the following command with the backend running:
+dotnet tool install --global dotnet-ef --version 6.*
 
-openapi-generator-cli generate -i http://localhost:5000/swagger/v1/swagger.json -g typescript-fetch -o ./src/infrastructure/apis/client --additional-properties=supportsES6=true
+To create a new migration use the following command and replace migration_name with the name of your new migration, usually the first migration is called "InitialCreate":
 
-To change environment variables change them in the .env file.
-
-The default user/password to login with the backend is "admin@default.com" after the first migration is created and applied.
+dotnet ef migrations add <migration_name> --context WebAppDatabaseContext --project .\MobyLabWebProgramming.Infrastructure --startup-project .\MobyLabWebProgramming.Backend
